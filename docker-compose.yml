@@ -1,0 +1,14 @@
+services:
+  blog-db:
+    image: postgres:13
+    ports:
+      - "15432:5432"
+    shm_size: 128mb
+    environment:
+      - POSTGRES_DB=blog_1
+      - POSTGRES_USER=user_blog
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ecommerce_data:/var/lib/postgresql/data
+volumes:
+  ecommerce_data:
