@@ -1,5 +1,6 @@
 package com.fastcampus.blog.entity
 
+import com.fastcampus.blog.common.util.toSlug
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -12,26 +13,27 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "articles", schema = "public")
-class Article (
+data class Article (
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   var articleId: Long,
+   var articleId: Long? = null,
    @Column(name = "author_id")
-   var authorId: Long,
+   var authorId: Long? = null,
    @Column(nullable = false)
    var title: String,
    @Column(unique = true, nullable = false)
-   var slug: String,
-   var description: String?,
-   var content: String?,
+   var slug: String = title.toSlug(),
+   var content: String? = null,
    @Column(name = "published_at")
-   var publishedAt: LocalDateTime?,
+   var publishedAt: LocalDateTime? = null,
    @CreationTimestamp
    @Column(name = "created_at")
-   var createdAt: LocalDateTime,
+   var createdAt: LocalDateTime ?= null,
    @UpdateTimestamp
    @Column(name = "updated_at")
-   var updatedAt: LocalDateTime,
+   var updatedAt: LocalDateTime? = null,
    @Column(name = "is_deleted")
-   var isDeleted: Boolean = false
+   var isDeleted: Boolean = false,
+   @Column(name = "is_published")
+   var isPublished: Boolean = false
 )

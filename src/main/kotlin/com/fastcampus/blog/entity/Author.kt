@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "authors", schema = "public")
-class Author (
+data class Author (
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    var authorId: Long,
