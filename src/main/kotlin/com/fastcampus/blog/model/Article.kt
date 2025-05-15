@@ -1,4 +1,4 @@
-package com.fastcampus.blog.entity
+package com.fastcampus.blog.model
 
 import com.fastcampus.blog.common.util.toSlug
 import jakarta.persistence.Column
@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "articles", schema = "public")
-data class Article (
+class Article (
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    var articleId: Long? = null,
