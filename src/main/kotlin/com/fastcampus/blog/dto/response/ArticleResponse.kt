@@ -2,7 +2,7 @@ package com.fastcampus.blog.dto.response
 
 import java.time.LocalDateTime
 
-data class ArticleDTO(
+data class ArticleResponse(
    val articleId: Long,
    val authorId: Long,
    val title: String,

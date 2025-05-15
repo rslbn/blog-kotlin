@@ -4,7 +4,7 @@ import com.fastcampus.blog.common.util.createApiResponse
 import com.fastcampus.blog.dto.request.CreateArticleRequest
 import com.fastcampus.blog.dto.request.UpdateArticleRequest
 import com.fastcampus.blog.dto.response.ApiResponse
-import com.fastcampus.blog.dto.response.ArticleDTO
+import com.fastcampus.blog.dto.response.ArticleResponse
 import com.fastcampus.blog.service.ArticleService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -24,13 +24,13 @@ class ArticleController(
 ) {
 
    @GetMapping
-   fun findAll(): ResponseEntity<ApiResponse<List<ArticleDTO>>> =
+   fun findAll(): ResponseEntity<ApiResponse<List<ArticleResponse>>> =
       ResponseEntity.ok(
          createApiResponse(status = HttpStatus.OK, data = articleService.findAll())
       )
 
    @GetMapping("/{slug}")
-   fun findBySlug(@PathVariable slug: String): ResponseEntity<ApiResponse<ArticleDTO>> = ResponseEntity.ok(
+   fun findBySlug(@PathVariable slug: String): ResponseEntity<ApiResponse<ArticleResponse>> = ResponseEntity.ok(
       createApiResponse(
          status = HttpStatus.OK,
          data = articleService.findBySlug(slug)
@@ -38,7 +38,7 @@ class ArticleController(
    )
 
    @PostMapping
-   fun create(@RequestBody request: CreateArticleRequest): ResponseEntity<ApiResponse<ArticleDTO>> =
+   fun create(@RequestBody request: CreateArticleRequest): ResponseEntity<ApiResponse<ArticleResponse>> =
       ResponseEntity.status(HttpStatus.CREATED).body(
          createApiResponse("Article successfully created!",
             HttpStatus.CREATED,
@@ -47,7 +47,7 @@ class ArticleController(
       )
 
    @PostMapping("/{slug}")
-   fun publish(@PathVariable slug: String): ResponseEntity<ApiResponse<ArticleDTO>> = ResponseEntity.ok(
+   fun publish(@PathVariable slug: String): ResponseEntity<ApiResponse<ArticleResponse>> = ResponseEntity.ok(
       createApiResponse("Article successfully published!", HttpStatus.OK,
          data = articleService.publish(slug)
       )
@@ -55,7 +55,7 @@ class ArticleController(
 
    @PutMapping("/{slug}")
    fun update(@PathVariable slug: String,
-              @RequestBody request: UpdateArticleRequest): ResponseEntity<ApiResponse<ArticleDTO>> =
+              @RequestBody request: UpdateArticleRequest): ResponseEntity<ApiResponse<ArticleResponse>> =
       ResponseEntity.ok(createApiResponse("Article is updated!", HttpStatus.OK,
          articleService.update(slug, request)))
 
