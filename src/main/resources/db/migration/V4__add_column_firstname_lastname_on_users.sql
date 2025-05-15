@@ -1,0 +1,3 @@
+ALTER TABLE USERS
+ADD firstname VARCHAR(50),
+ADD lastname VARCHAR(50);
