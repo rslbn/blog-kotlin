@@ -13,17 +13,23 @@ import com.fastcampus.blog.dto.request.user.RegisterRequest
 import com.fastcampus.blog.dto.request.user.UpdateUserProfileRequest
 import com.fastcampus.blog.dto.response.UserResponse
 import com.fastcampus.blog.model.User
+import com.fastcampus.blog.model.UserRole
 import com.fastcampus.blog.repository.UserRepository
+import com.fastcampus.blog.repository.UserRoleRepository
 import com.fastcampus.blog.service.UserService
+import jakarta.transaction.Transactional
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
    private val userRepository: UserRepository,
-   private val passwordEncoder: PasswordEncoder
+   private val passwordEncoder: PasswordEncoder,
+   private val userRoleRepository: UserRoleRepository,
+   private val roleRepository: UserRoleRepository
 ) : UserService {
 
+   @Transactional
    override fun register(request: RegisterRequest): UserResponse {
       var user: User? = null
       with(request) {
@@ -44,7 +50,12 @@ class UserServiceImpl(
             lastname = lastname!!
          )
       }
-      return userRepository.save(user!!).mapToUserDTO()
+      user = userRepository.save(user!!)
+      val roles: List<UserRole> = listOf(
+         UserRole(userRoleId = UserRole.UserRoleId(user?.userId!!, 3))
+      )
+      userRoleRepository.saveAll(roles)
+      return user!!.mapToUserDTO()
    }
 
    override fun updateProfile(username: String, request: UpdateUserProfileRequest): UserResponse {
@@ -101,7 +112,9 @@ class UserServiceImpl(
    }
 
    override fun delete(username: String) {
-
+      val user = userRepository.findByUsernameAndIsDeleted(username, false) ?: throw ResourceNotFoundException("")
+      user.isDeleted = true
+      val userRoles = userRoleRepository.deleteByUserId(user.userId!!)
    }
 
    private fun validateName(target: String) = target.matches("^[a-z A-Z]+$".toRegex())

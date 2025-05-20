@@ -1,16 +1,16 @@
 package com.fastcampus.blog.model
 
-import io.jsonwebtoken.lang.Collections
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserInfo(
-   val user: User
+   val user: User,
+   val roles: List<Role>
 ): UserDetails {
 
    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-      return Collections.of(SimpleGrantedAuthority("USER"))
+      return roles.map { SimpleGrantedAuthority(it.name) }.toMutableSet()
    }
 
    override fun getPassword(): String {

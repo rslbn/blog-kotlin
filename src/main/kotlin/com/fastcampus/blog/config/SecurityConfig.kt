@@ -49,7 +49,7 @@ class SecurityConfig(
          .csrf { it.disable() }
          .cors { configurer -> configurer.configurationSource(corsConfigurationSource) }
          .authorizeHttpRequests { auth ->
-            auth.requestMatchers("/auth/**").permitAll()
+            auth.requestMatchers("/auth/**", "/users/register").permitAll()
             auth.anyRequest().authenticated()
          }
          .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
