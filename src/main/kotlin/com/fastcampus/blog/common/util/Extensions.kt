@@ -1,5 +1,7 @@
 package com.fastcampus.blog.common.util
 
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 fun String.toSlug() = lowercase(Locale.getDefault())
@@ -9,3 +11,9 @@ fun String.toSlug() = lowercase(Locale.getDefault())
    .split(" ")
    .joinToString("-")
    .replace("-+".toRegex(), "-")
+
+fun LocalDateTime.toDate(): Date {
+   val zoneId = ZoneId.systemDefault();
+   val zoneDateTime = atZone(zoneId)
+   return Date.from(zoneDateTime.toInstant())
+}
