@@ -4,7 +4,6 @@ import com.fastcampus.blog.common.error.ResourceNotFoundException
 import com.fastcampus.blog.model.UserInfo
 import com.fastcampus.blog.repository.RoleRepository
 import com.fastcampus.blog.repository.UserRepository
-import com.fastcampus.blog.repository.UserRoleRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service
 @Service
 class UserDetailsServiceImpl(
    private val userRepository: UserRepository,
-   private val userRoleRepository: UserRoleRepository,
    private val roleRepository: RoleRepository
 ): UserDetailsService {
    override fun loadUserByUsername(username: String?): UserDetails {

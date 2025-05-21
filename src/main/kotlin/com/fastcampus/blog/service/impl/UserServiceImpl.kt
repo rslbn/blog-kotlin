@@ -6,7 +6,7 @@ import com.fastcampus.blog.common.error.EmailAlreadyExistsException
 import com.fastcampus.blog.common.error.InvalidPasswordException
 import com.fastcampus.blog.common.error.ResourceNotFoundException
 import com.fastcampus.blog.common.error.UsernameAlreadyExistsException
-import com.fastcampus.blog.common.util.mapToUserDTO
+import com.fastcampus.blog.common.util.mapToUserResponse
 import com.fastcampus.blog.dto.request.user.ChangeEmailRequest
 import com.fastcampus.blog.dto.request.user.ChangePasswordRequest
 import com.fastcampus.blog.dto.request.user.RegisterRequest
@@ -26,7 +26,6 @@ class UserServiceImpl(
    private val userRepository: UserRepository,
    private val passwordEncoder: PasswordEncoder,
    private val userRoleRepository: UserRoleRepository,
-   private val roleRepository: UserRoleRepository
 ) : UserService {
 
    @Transactional
@@ -52,10 +51,10 @@ class UserServiceImpl(
       }
       user = userRepository.save(user!!)
       val roles: List<UserRole> = listOf(
-         UserRole(userRoleId = UserRole.UserRoleId(user?.userId!!, 3))
+         UserRole(userRoleId = UserRole.UserRoleId(user?.userId!!, 4))// roleId for USER role)
       )
       userRoleRepository.saveAll(roles)
-      return user!!.mapToUserDTO()
+      return user!!.mapToUserResponse()
    }
 
    override fun updateProfile(username: String, request: UpdateUserProfileRequest): UserResponse {
@@ -76,7 +75,7 @@ class UserServiceImpl(
             if (validateName(lastname)) user?.lastname = lastname
             else throw BadRequestException("lastname is invalid")
       }
-      return userRepository.save(user!!).mapToUserDTO()
+      return userRepository.save(user!!).mapToUserResponse()
    }
 
    override fun changePassword(request: ChangePasswordRequest): UserResponse {
@@ -94,7 +93,7 @@ class UserServiceImpl(
          val encodedNewPassword = passwordEncoder.encode(newPassword)
          user?.password = encodedNewPassword
       }
-      return userRepository.save(user!!).mapToUserDTO()
+      return userRepository.save(user!!).mapToUserResponse()
    }
 
    override fun changeEmail(request: ChangeEmailRequest): UserResponse {
@@ -108,7 +107,7 @@ class UserServiceImpl(
          if (!passwordEncoder.matches(confirmationPassword, user?.password))
             throw CredentialsException("Password does not match!")
       }
-      return userRepository.save(user!!).mapToUserDTO()
+      return userRepository.save(user!!).mapToUserResponse()
    }
 
    override fun delete(username: String) {

@@ -7,18 +7,18 @@ import com.fastcampus.blog.model.Article
 import com.fastcampus.blog.model.Author
 import com.fastcampus.blog.model.User
 
-fun Article.mapToArticleDTO() = ArticleResponse(
+fun Article.mapToArticleResponse() = ArticleResponse(
    articleId!!, authorId!!, title,
    slug, content!!,
    publishedAt, createdAt!!, isPublished = isPublished
 )
 
-fun Author.mapToAuthorDTO() = AuthorResponse(
-   authorId, userId, bio!!,
-   alias!!, createdAt, updatedAt,
+fun Author.mapToAuthorResponse() = AuthorResponse(
+   authorId!!, userId!!, bio!!,
+   alias!!, createdAt!!, updatedAt,
    false
 )
 
-fun User.mapToUserDTO() = UserResponse(
+fun User.mapToUserResponse() = UserResponse(
    userId!!, username, getFullname(), email!!, createdAt, updatedAt
 )

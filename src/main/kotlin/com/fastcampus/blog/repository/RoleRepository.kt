@@ -13,7 +13,7 @@ interface RoleRepository: JpaRepository<Role, Int> {
       SELECT r.* FROM ROLES r
       JOIN users_roles ur on r.role_id = ur.role_id
       JOIN users u on u.user_id = ur.user_id
-      WHERE users.username = :username
+      WHERE u.username = :username
    """, nativeQuery = true)
    fun findRolesByUsername(@Param("username") username: String): List<Role>
 }

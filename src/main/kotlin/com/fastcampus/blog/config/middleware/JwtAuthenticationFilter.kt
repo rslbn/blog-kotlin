@@ -22,17 +22,7 @@ class JwtAuthenticationFilter(
       response: HttpServletResponse,
       filterChain: FilterChain
    ) {
-      // Skip authentication for paths that don't need it
-      if (request.servletPath.contains("/auth/")) {
-         filterChain.doFilter(request, response)
-         return
-      }
-
       val authHeader = request.getHeader("Authorization")
-      val test = request.getHeader("Testing-something")
-      logger.info("Header: $authHeader")
-      logger.info("Testing-something: $test")
-
       // If no authorization header or not Bearer token, continue to next filter
       if (authHeader.isNullOrBlank() || !authHeader.startsWith("Bearer ")) {
          filterChain.doFilter(request, response)
