@@ -1,5 +1,6 @@
 package com.fastcampus.blog.model
 
+import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
@@ -13,7 +14,9 @@ class ArticleCategory(
 ) {
    @Embeddable
    data class ArticleCategoryId(
+      @Column(name = "article_id")
       var articleId: Long,
+      @Column(name = "category_id")
       var categoryId: Int
    )
 }
