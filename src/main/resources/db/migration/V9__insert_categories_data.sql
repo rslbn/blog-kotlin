@@ -1,0 +1,16 @@
+--INSERT INTO categories (name, description) VALUES ('Best Of', '');
+INSERT INTO categories (name, description) VALUES ('Biography', '');
+--INSERT INTO categories (name, description) VALUES ('Checklist', '');
+INSERT INTO categories (name, description) VALUES ('Health', '');
+INSERT INTO categories (name, description) VALUES ('History', '');
+--INSERT INTO categories (name, description) VALUES ('How-to', '');
+--INSERT INTO categories (name, description) VALUES ('Mistakes to Avoid', '');
+INSERT INTO categories (name, description) VALUES ('News', '');
+INSERT INTO categories (name, description) VALUES ('Philosophy', '');
+INSERT INTO categories (name, description) VALUES ('Politics', '');
+INSERT INTO categories (name, description) VALUES ('Religion', '');
+INSERT INTO categories (name, description) VALUES ('Review', '');
+INSERT INTO categories (name, description) VALUES ('Science', '');
+INSERT INTO categories (name, description) VALUES ('Social Science', '');
+INSERT INTO categories (name, description) VALUES ('Sports', '');
+INSERT INTO categories (name, description) VALUES ('Technology', '');
