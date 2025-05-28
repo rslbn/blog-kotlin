@@ -10,7 +10,7 @@ import com.fastcampus.blog.model.User
 fun Article.mapToArticleResponse() = ArticleResponse(
    articleId!!, authorId!!, title,
    slug, content!!,
-   publishedAt, createdAt!!, isPublished = isPublished
+   publishedAt, createdAt!!, updatedAt,isPublished = isPublished
 )
 
 fun Author.mapToAuthorResponse() = AuthorResponse(
