@@ -1,8 +1,8 @@
 package com.fastcampus.blog.controller
 
 import com.fastcampus.blog.common.util.createApiResponse
-import com.fastcampus.blog.dto.request.CreateArticleRequest
-import com.fastcampus.blog.dto.request.UpdateArticleRequest
+import com.fastcampus.blog.dto.request.article.CreateArticleRequest
+import com.fastcampus.blog.dto.request.article.UpdateArticleRequest
 import com.fastcampus.blog.dto.response.ApiResponse
 import com.fastcampus.blog.dto.response.ArticleResponse
 import com.fastcampus.blog.service.ArticleService
@@ -55,7 +55,8 @@ class ArticleController(
 
    @PutMapping("/{slug}")
    fun update(@PathVariable slug: String,
-              @RequestBody request: UpdateArticleRequest): ResponseEntity<ApiResponse<ArticleResponse>> =
+              @RequestBody request: UpdateArticleRequest
+   ): ResponseEntity<ApiResponse<ArticleResponse>> =
       ResponseEntity.ok(createApiResponse("Article is updated!", HttpStatus.OK,
          articleService.update(slug, request)))
 

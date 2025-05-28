@@ -1,7 +1,7 @@
 package com.fastcampus.blog.service
 
-import com.fastcampus.blog.dto.request.CreateArticleRequest
-import com.fastcampus.blog.dto.request.UpdateArticleRequest
+import com.fastcampus.blog.dto.request.article.CreateArticleRequest
+import com.fastcampus.blog.dto.request.article.UpdateArticleRequest
 import com.fastcampus.blog.dto.response.ArticleResponse
 
 interface ArticleService {
