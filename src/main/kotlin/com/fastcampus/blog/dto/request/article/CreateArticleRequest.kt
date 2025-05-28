@@ -1,4 +1,4 @@
-package com.fastcampus.blog.dto.request
+package com.fastcampus.blog.dto.request.article
 
 data class CreateArticleRequest (
    val title: String,
