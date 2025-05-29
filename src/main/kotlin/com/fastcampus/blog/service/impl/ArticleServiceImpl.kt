@@ -1,5 +1,10 @@
 package com.fastcampus.blog.service.impl
 
+import com.fastcampus.blog.common.ErrorMessageKeys.ARTICLE_ALREADY_PUBLISHED
+import com.fastcampus.blog.common.ErrorMessageKeys.ARTICLE_NOT_FOUND_SLUG
+import com.fastcampus.blog.common.ErrorMessageKeys.INVALID_ARTICLE_OWNERSHIP
+import com.fastcampus.blog.common.ErrorMessageKeys.MUST_HAVE_ROLE
+import com.fastcampus.blog.common.ErrorMessageKeys.NOT_FOUND
 import com.fastcampus.blog.common.MessageSourceUtil
 import com.fastcampus.blog.common.error.ResourceNotFoundException
 import com.fastcampus.blog.common.util.mapToArticleResponse
@@ -38,7 +43,7 @@ class ArticleServiceImpl(
    override fun findBySlug(slug: String): ArticleResponse {
       val result = articleRepository.findBySlugAndIsDeleted(slug, false)
       return result?.mapToArticleResponse()
-         ?: throw RuntimeException(messageSourceUtil.getMessage("error.not.found", "Article"))
+         ?: throw RuntimeException(messageSourceUtil.getMessage(NOT_FOUND, "Article"))
    }
 
    // TODO: verify if the categoryIds is not empty and category does exists. For create() and update()
@@ -46,14 +51,17 @@ class ArticleServiceImpl(
    override fun create(request: CreateArticleRequest): ArticleResponse {
       val user = SecurityContextHolder.getContext().authentication.principal as UserInfo
       if (!user.roles.map { it.name }.contains("AUTHOR")) {
-         throw RuntimeException("User must have AUTHOR role")
+         throw RuntimeException(messageSourceUtil.getMessage(MUST_HAVE_ROLE, "AUTHOR"))
       }
 
-      val author = authorRepository.findByUserId(user.user.userId!!)
+      val author = authorRepository.findByUserId(user.user.userId!!) ?: throw ResourceNotFoundException(
+         messageSourceUtil.getMessage(NOT_FOUND, "Author")
+      )
+
       var article = Article(
          title = request.title,
          content = request.content,
-         authorId = author?.authorId
+         authorId = author.authorId
       )
       article = articleRepository.save(article)
 
@@ -132,25 +140,26 @@ class ArticleServiceImpl(
             }
             articleRepository.save(savedArticle).mapToArticleResponse()
          }
-      } ?: throw RuntimeException(messageSourceUtil.getMessage("error.not.found", "Article"))
+      } ?: throw RuntimeException(messageSourceUtil.getMessage(NOT_FOUND, "Article"))
 
    override fun publish(slug: String): ArticleResponse =
       articleRepository.findBySlugAndIsDeleted(slug, false)?.let { article ->
          val user = SecurityContextHolder.getContext().authentication.principal as UserInfo
-         val author = authorRepository.findByUserId(user.user.userId!!) ?: throw ResourceNotFoundException("Author not found!")
+         val author = authorRepository.findByUserId(user.user.userId!!) ?:
+         throw ResourceNotFoundException(messageSourceUtil.getMessage(NOT_FOUND, "AUTHOR"))
          if (article.authorId != author.authorId) {
-            throw ResourceNotFoundException("User does not own this article!")
+            throw ResourceNotFoundException(messageSourceUtil.getMessage(INVALID_ARTICLE_OWNERSHIP))
          }
          if (article.isPublished)
-            throw RuntimeException(messageSourceUtil.getMessage("error.article.already.published"))
+            throw RuntimeException(messageSourceUtil.getMessage(ARTICLE_ALREADY_PUBLISHED))
          article.publishedAt = LocalDateTime.now()
          article.isPublished = true
          articleRepository.save(article).mapToArticleResponse()
-      }  ?: throw RuntimeException(messageSourceUtil.getMessage("error.not.found", "Article"))
+      }  ?: throw RuntimeException(messageSourceUtil.getMessage(NOT_FOUND, "Article"))
 
    override fun delete(slug: String) {
       val savedArticle = articleRepository.findBySlugAndIsDeleted(slug, false)
-         ?: throw ResourceNotFoundException("Article not found with slug, ${slug}!")
+         ?: throw ResourceNotFoundException(messageSourceUtil.getMessage(ARTICLE_NOT_FOUND_SLUG, slug))
       savedArticle.isDeleted = true
       articleRepository.save(savedArticle)
    }
