@@ -34,7 +34,7 @@ class UserServiceImpl(
 
    @Transactional
    override fun register(request: RegisterRequest): UserResponse {
-      var user: User? = null
+      lateinit var user: User
       with(request) {
          if (userRepository.existsByUsernameAndIsDeleted(username!!, false)) 
             throw UsernameAlreadyExistsException(
@@ -59,7 +59,7 @@ class UserServiceImpl(
             lastname = lastname!!
          )
       }
-      user = userRepository.save(user!!)
+      user = userRepository.save(user)
       val roles: List<UserRole> = listOf(
          UserRole(userRoleId = UserRole.UserRoleId(user.userId!!, 4))// roleId for USER role)
       )
@@ -95,7 +95,7 @@ class UserServiceImpl(
    }
 
    override fun changePassword(request: ChangePasswordRequest): UserResponse {
-      var user: User? = null
+      lateinit var user: User
       with(request) {
          user = userRepository.findByUsernameAndIsDeleted(username!!, false) ?:
             throw ResourceNotFoundException(
@@ -114,11 +114,11 @@ class UserServiceImpl(
          val encodedNewPassword = passwordEncoder.encode(newPassword)
          user.password = encodedNewPassword
       }
-      return userRepository.save(user!!).mapToUserResponse()
+      return userRepository.save(user).mapToUserResponse()
    }
 
    override fun changeEmail(request: ChangeEmailRequest): UserResponse {
-      var user: User? = null
+      lateinit var user: User
       with(request) {
          user = userRepository.findByUsernameAndIsDeleted(username!!, false)
             ?: throw ResourceNotFoundException(
@@ -135,7 +135,7 @@ class UserServiceImpl(
          if (!passwordEncoder.matches(confirmationPassword, user.password))
             throw InvalidPasswordException(messageSource.getMessage(ErrorMessageKeys.PASSWORD_CONFIRMATION_NOT_MATCH))
       }
-      return userRepository.save(user!!).mapToUserResponse()
+      return userRepository.save(user).mapToUserResponse()
    }
 
    override fun delete(username: String) {

@@ -27,7 +27,7 @@ class Comment(
    @Column(name = "updated_at")
    @UpdateTimestamp
    var updatedAt: LocalDateTime? = null,
-   @Column("is_deleted")
+   @Column(name = "is_deleted")
    var isDeleted: Boolean = false
 ) {
 
